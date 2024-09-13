@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository. secrets using yaml file, joi validation for secrets, globally available configurations, using yaml file, yaml file validation had to be separated as its schema validation was happening before the yaml file was loaded.
 
 ## Project setup
 
