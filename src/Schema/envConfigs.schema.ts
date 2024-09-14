@@ -9,4 +9,11 @@ export const envValidationSchema = Joi.object({
   DB_NAME: Joi.string().required(),
   DB_USER: Joi.string().required(),
   APP_PORT: Joi.number().port().required(),
+
+  MYSQL_ALPHA_DB_HOST: Joi.string().hostname().required(),
+  MYSQL_ALPHA_DB_PORT: Joi.number().port().required(),
+  MYSQL_ALPHA_DB_PASSWORD: Joi.string().required(),
+  MYSQL_ALPHA_DB_DATABASE: Joi.string().required(),
+  MYSQL_ALPHA_DB_USERNAME: Joi.string().required(),
+  MYSQL_ALPHA_DB_SYNCHRONIZE: Joi.boolean().required(),
 });
