@@ -1,10 +1,16 @@
 import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
-import { postgresAlphaDbConfig, mySqlAlphaDbConfig } from './config/databaseConfig';
+import {
+  postgresAlphaDbConfig,
+  mySqlAlphaDbConfig,
+  redisConfig,
+} from './config/databaseConfig';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { UserModule } from './user/user.module';
+import { CacheService } from './cache/cache.service';
+import { CacheModule } from './cache/cache.module';
 import loadYamlConfig from './config/loadYamlConfig';
 
 @Module({
@@ -15,6 +21,7 @@ import loadYamlConfig from './config/loadYamlConfig';
       isGlobal: true,
     }),
     UserModule,
+    CacheModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -29,17 +36,23 @@ export class AppModule implements OnModuleInit {
   async onModuleInit() {
     try {
       // Initialize PostgreSQL DataSource
-      this.postgresAlphaDataSource = new DataSource(postgresAlphaDbConfig(this.configService));
-       await this.postgresAlphaDataSource.initialize();
+      this.postgresAlphaDataSource = new DataSource(
+        postgresAlphaDbConfig(this.configService),
+      );
+      await this.postgresAlphaDataSource.initialize();
       this.logger.log('🐘 Postgres 🐘 AlphaDataSource connected 💡 ✅');
 
       // Initialize MySQL DataSource
-      this.mySqlAlphaDataSource = new DataSource(mySqlAlphaDbConfig(this.configService));
+      this.mySqlAlphaDataSource = new DataSource(
+        mySqlAlphaDbConfig(this.configService),
+      );
       await this.mySqlAlphaDataSource.initialize();
       this.logger.log('🐬 MySQL 🐬 AlphaDataSource connected 💡 ✅');
     } catch (error) {
-
-      console.log("🎖️🎖️  ⚔️  file: app.module.ts:40  ⚔️  AppModule  ⚔️  onModuleInit  ⚔️  error 🎖️🎖️", error)
+      console.log(
+        '🎖️🎖️  ⚔️  file: app.module.ts:40  ⚔️  AppModule  ⚔️  onModuleInit  ⚔️  error 🎖️🎖️',
+        error,
+      );
 
       this.logger.error('Database connection failed', error);
     }

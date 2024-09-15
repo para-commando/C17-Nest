@@ -1,6 +1,8 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { DataSourceOptions } from 'typeorm';
+import { Redis } from 'ioredis';
+import { Logger } from '@nestjs/common';
 
 export const postgresAlphaDbConfig = (configService: ConfigService): DataSourceOptions => ({
 
@@ -17,8 +19,6 @@ export const postgresAlphaDbConfig = (configService: ConfigService): DataSourceO
 });
 
 export const mySqlAlphaDbConfig = (configService: ConfigService): DataSourceOptions => ({
-
-
   type: 'mysql',
   host: configService.get<string>('MYSQL_ALPHA_DB_HOST'),
   port: configService.get<number>('MYSQL_ALPHA_DB_PORT'),
@@ -30,3 +30,24 @@ export const mySqlAlphaDbConfig = (configService: ConfigService): DataSourceOpti
   logging: ['error'],  // You can enable logging for various events
 
 });
+
+export const redisConfig = (configService: ConfigService): Redis => {
+  const redisClient = new Redis({
+    host: configService.get<string>('REDIS_HOST', 'localhost'),
+    port: configService.get<number>('REDIS_PORT', 6379),
+  });
+
+  const logger = new Logger('RedisClient');
+
+  // Add event listener for successful connection
+  redisClient.on('connect', () => {
+    logger.log('🚀 Redis client connected successfully 💡 ✅');
+  });
+
+  // Add error handler
+  redisClient.on('error', (error) => {
+    logger.error('❌ Redis connection failed:', error);
+  });
+
+  return redisClient;
+};
