@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository. secrets using yaml file, joi validation for secrets, globally available configurations, using yaml file, yaml file validation had to be separated as its schema validation was happening before the yaml file was loaded. integrated postgres db and mysql db, added logic to separate entity based on the db they are created for, isolated db initialization process for better control and isolation and logging, added loggers to indicate status of each db connection. integrating redis use case into caching service with connectivity indication loggers
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository. secrets using yaml file, joi validation for secrets, globally available configurations, using yaml file, yaml file validation had to be separated as its schema validation was happening before the yaml file was loaded. integrated postgres db and mysql db, added logic to separate entity based on the db they are created for, isolated db initialization process for better control and isolation and logging, added loggers to indicate status of each db connection. integrating redis use case into caching service with connectivity indication loggers, integrating fully customized swagger ui 
 
 ## Project setup
 

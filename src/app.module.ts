@@ -12,9 +12,15 @@ import { UserModule } from './user/user.module';
 import { CacheService } from './cache/cache.service';
 import { CacheModule } from './cache/cache.module';
 import loadYamlConfig from './config/loadYamlConfig';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'wwwroot'),
+      serveRoot: '/api/wwwroot',
+    }),
     ConfigModule.forRoot({
       load: [loadYamlConfig],
       envFilePath: ['.env.local', '.env'],
