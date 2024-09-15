@@ -20,12 +20,12 @@ async function bootstrap() {
 
   // const document = SwaggerModule.createDocument(app, configs);
   // SwaggerModule.setup('api/docs', app, document); // Serve docs at /api/docs
- 
+
   const swaggerDocumentBuilder = new SwaggerDocumentBuilder(app);
   swaggerDocumentBuilder.setupSwagger();
   await app.listen(APP_PORT);
   console.log(
-    `🪖  Ghatak-Nest 🪺  can be accessed on 📡 http://${APP_HOST}:${APP_PORT} 🛰️`,
+    `🪖  Ghatak-Nest 🪺  can be accessed on 📡 http://${APP_HOST}:${APP_PORT}/api/sw 🛰️`,
   );
 }
 bootstrap();
