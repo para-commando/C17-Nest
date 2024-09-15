@@ -1,26 +1,66 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { Logger, Module, OnModuleInit } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DataSource } from 'typeorm';
+import {
+  postgresAlphaDbConfig,
+  mySqlAlphaDbConfig,
+  redisConfig,
+} from './config/databaseConfig';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
+import { UserModule } from './user/user.module';
+import { CacheService } from './cache/cache.service';
+import { CacheModule } from './cache/cache.module';
 import loadYamlConfig from './config/loadYamlConfig';
-import { envValidationSchema } from './Schema/envConfigs.schema';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  // If a secrete variable is found in multiple files, the first one takes precedence.
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: ['.env.local', '.env'],  // Loads the .env files
-      load: [loadYamlConfig],                // Loads the YAML configuration
-      isGlobal: true,                       // Makes ConfigModule available globally
-      cache: true,                          // Caches the configuration
-      validationSchema: envValidationSchema,   // Applies the Joi validation
-      validationOptions: {
-        allowUnknown: true,                 // Allows unknown fields in config
-        abortEarly: true,                   // Stops validation on the first error
-      },
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'wwwroot'),
+      serveRoot: '/api/wwwroot',
     }),
+    ConfigModule.forRoot({
+      load: [loadYamlConfig],
+      envFilePath: ['.env.local', '.env'],
+      isGlobal: true,
+    }),
+    UserModule,
+    CacheModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  private readonly logger = new Logger(AppModule.name);
+  private postgresAlphaDataSource: DataSource;
+  private mySqlAlphaDataSource: DataSource;
+
+  constructor(private configService: ConfigService) {}
+
+  async onModuleInit() {
+    try {
+      // Initialize PostgreSQL DataSource
+      this.postgresAlphaDataSource = new DataSource(
+        postgresAlphaDbConfig(this.configService),
+      );
+      await this.postgresAlphaDataSource.initialize();
+      this.logger.log('🐘 Postgres 🐘 AlphaDataSource connected 💡 ✅');
+
+      // Initialize MySQL DataSource
+      this.mySqlAlphaDataSource = new DataSource(
+        mySqlAlphaDbConfig(this.configService),
+      );
+      await this.mySqlAlphaDataSource.initialize();
+      this.logger.log('🐬 MySQL 🐬 AlphaDataSource connected 💡 ✅');
+    } catch (error) {
+      console.log(
+        '🎖️🎖️  ⚔️  file: app.module.ts:40  ⚔️  AppModule  ⚔️  onModuleInit  ⚔️  error 🎖️🎖️',
+        error,
+      );
+
+      this.logger.error('Database connection failed', error);
+    }
+  }
+}

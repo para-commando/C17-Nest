@@ -7,9 +7,12 @@ export const yamlValidationSchema = Joi.object({
   }).required(),
   db: Joi.object({
     postgres: Joi.object({
-      url: Joi.string().hostname().required(),
+      host: Joi.string().hostname().required(),
       port: Joi.number().port().required(),
-      database: Joi.string().required(),
+      databaseName: Joi.string().required(),
+      username: Joi.string().required(),
+      password: Joi.optional(),
+      isSynchronized: Joi.boolean().default(false), // Set to false in production
     }).required(),
 
     sqlite: Joi.object({
