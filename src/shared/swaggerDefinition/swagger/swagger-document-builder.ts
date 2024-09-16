@@ -36,6 +36,7 @@ export class SwaggerDocumentBuilder {
 
   public setupSwagger() {
     const document = this.createDocument();
+    console.log("🎖️🎖️  ⚔️  file: swagger-document-builder.ts:49  ⚔️  SwaggerDocumentBuilder  ⚔️  setupSwagger  ⚔️   process.env.SWAGGER_URL, 🎖️🎖️",  process.env.SWAGGER_URL,)
 
     const swaggerUI = new SwaggerUI(process.env.APPLICATION_URL);
     SwaggerModule.setup(
@@ -45,4 +46,6 @@ export class SwaggerDocumentBuilder {
       swaggerUI.customOptions,
     );
   }
+
+
 }

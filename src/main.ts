@@ -1,31 +1,37 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { SwaggerDocumentBuilder } from './swagger/swagger-document-builder';
+import { SwaggerDocumentBuilder } from './shared/swaggerDefinition/swagger/swagger-document-builder';
+import { LogDefinitionService } from './shared/log-definition/log-definition.service';
+
+
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+
+  const app = await NestFactory.create(AppModule,{
+    bufferLogs: true,
+  });
+  app.useLogger(app.get(LogDefinitionService));
+
   const config = new ConfigService();
   const APP_PORT = config.get<number>('APP_PORT') || 3000;
-  const APP_HOST = config.get<number>('APP_HOST') || 'localhost';
-  app.enableCors();
-  // Set up Swagger/OpenAPI documentation
-  // const configs = new DocumentBuilder()
-  //   .setTitle('Ghatak Nest API')
-  //   .setDescription('API documentation for Ghatak Nest boilerplate')
-  //   .setVersion('1.0')
-  //   .addTag('Ghatak') // You can group endpoints using tags
-  //   .build();
+  const APP_HOST = config.get<string>('APP_HOST') || 'localhost';
+  const SWAGGER_URL = config.get<string>('SWAGGER_URL');
+  const NON_SWAGGER_URL = config.get<string>('NON_SWAGGER_URL');
 
-  // const document = SwaggerModule.createDocument(app, configs);
-  // SwaggerModule.setup('api/docs', app, document); // Serve docs at /api/docs
+  app.enableCors();
+  app.setGlobalPrefix(NON_SWAGGER_URL);
 
   const swaggerDocumentBuilder = new SwaggerDocumentBuilder(app);
   swaggerDocumentBuilder.setupSwagger();
+
   await app.listen(APP_PORT);
+
   console.log(
-    `🪖  Ghatak-Nest 🪺  can be accessed on 📡 http://${APP_HOST}:${APP_PORT}/api/sw 🛰️`,
+    `🪖  Ghatak-Nest 🪺 swagger UI can be accessed on 📡 http://${APP_HOST}:${APP_PORT}/${SWAGGER_URL} 🛰️`,
+  );
+  console.log(
+    `🪖  Ghatak-Nest 🪺 plain endpoints can be accessed on 📡 http://${APP_HOST}:${APP_PORT}/${NON_SWAGGER_URL} 🛰️`,
   );
 }
 bootstrap();

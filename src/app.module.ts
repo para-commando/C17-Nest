@@ -1,24 +1,30 @@
-import { Logger, Module, OnModuleInit } from '@nestjs/common';
+import { Logger, MiddlewareConsumer, Module, NestModule, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
 import {
   postgresAlphaDbConfig,
   mySqlAlphaDbConfig,
-  redisConfig,
-} from './config/databaseConfig';
+} from './shared/config/databaseConfig';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { UserModule } from './user/user.module';
-import { CacheService } from './cache/cache.service';
-import { CacheModule } from './cache/cache.module';
-import loadYamlConfig from './config/loadYamlConfig';
+import { CacheModule } from './shared/cache/cache.module';
+import loadYamlConfig from './shared/config/loadYamlConfig';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { LogDefinitionService } from './shared/log-definition/log-definition.service';
+import { LogDefinitionMiddleware } from './shared/log-definition/log-definition.middleware';
+import { OrdersModule } from './api/orders/orders.module';
+import { ClientsModule } from './api/clients/clients.module';
+import { DeliveriesModule } from './api/deliveries/deliveries.module';
+import { InventoriesModule } from './api/inventories/inventories.module';
+import { NotificationsModule } from './api/notifications/notifications.module';
+import { ClientsModule } from './api/clients/clients.module';
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'wwwroot'),
+      rootPath: join(__dirname, '../src/shared/swaggerDefinition', 'wwwroot'),
       serveRoot: '/api/wwwroot',
     }),
     ConfigModule.forRoot({
@@ -28,14 +34,25 @@ import { join } from 'path';
     }),
     UserModule,
     CacheModule,
+    OrdersModule,
+    ClientsModule,
+    DeliveriesModule,
+    InventoriesModule,
+    NotificationsModule,
+
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, LogDefinitionService],
 })
-export class AppModule implements OnModuleInit {
+export class AppModule implements OnModuleInit, NestModule {
+
+
   private readonly logger = new Logger(AppModule.name);
   private postgresAlphaDataSource: DataSource;
   private mySqlAlphaDataSource: DataSource;
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LogDefinitionMiddleware).forRoutes('*');
+  }
 
   constructor(private configService: ConfigService) {}
 
