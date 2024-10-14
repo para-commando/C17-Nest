@@ -8,8 +8,10 @@ export class SwaggerDocumentBuilder {
 
   private buildConfig() {
     const docBuilder = new DocumentBuilder()
-      .setTitle('Ghatak-Nest API Client')
-      .setDescription('This is a NestJs boilerplate code backend API interface.')
+      .setTitle('C17-nest API Client')
+      .setDescription(
+        'This is a NestJs boilerplate code backend API interface.',
+      )
       .setVersion('2.0')
       .addBasicAuth()
       .addBearerAuth(
@@ -36,7 +38,10 @@ export class SwaggerDocumentBuilder {
 
   public setupSwagger() {
     const document = this.createDocument();
-    console.log("🎖️🎖️  ⚔️  file: swagger-document-builder.ts:49  ⚔️  SwaggerDocumentBuilder  ⚔️  setupSwagger  ⚔️   process.env.SWAGGER_URL, 🎖️🎖️",  process.env.SWAGGER_URL,)
+    console.log(
+      '🎖️🎖️  ⚔️  file: swagger-document-builder.ts:49  ⚔️  SwaggerDocumentBuilder  ⚔️  setupSwagger  ⚔️   process.env.SWAGGER_URL, 🎖️🎖️',
+      process.env.SWAGGER_URL,
+    );
 
     const swaggerUI = new SwaggerUI(process.env.APPLICATION_URL);
     SwaggerModule.setup(
@@ -46,6 +51,4 @@ export class SwaggerDocumentBuilder {
       swaggerUI.customOptions,
     );
   }
-
-
 }
