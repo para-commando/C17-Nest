@@ -4,11 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { SwaggerDocumentBuilder } from './shared/swaggerDefinition/swagger/swagger-document-builder';
 import { LogDefinitionService } from './shared/log-definition/log-definition.service';
 
-
-
 async function bootstrap() {
-
-  const app = await NestFactory.create(AppModule,{
+  const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
   app.useLogger(app.get(LogDefinitionService));
@@ -28,10 +25,10 @@ async function bootstrap() {
   await app.listen(APP_PORT);
 
   console.log(
-    `🪖  Ghatak-Nest 🪺 swagger UI can be accessed on 📡 http://${APP_HOST}:${APP_PORT}/${SWAGGER_URL} 🛰️`,
+    `🪖  C17-nest 🪺 swagger UI can be accessed on 📡 http://${APP_HOST}:${APP_PORT}/${SWAGGER_URL} 🛰️`,
   );
   console.log(
-    `🪖  Ghatak-Nest 🪺 plain endpoints can be accessed on 📡 http://${APP_HOST}:${APP_PORT}/${NON_SWAGGER_URL} 🛰️`,
+    `🪖  C17-nest 🪺 plain endpoints can be accessed on 📡 http://${APP_HOST}:${APP_PORT}/${NON_SWAGGER_URL} 🛰️`,
   );
 }
 bootstrap();

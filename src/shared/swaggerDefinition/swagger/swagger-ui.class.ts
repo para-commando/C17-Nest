@@ -3,7 +3,7 @@ import { SWAGGER_UI_CONSTANTS } from './constants/swagger-ui.constants';
 export class SwaggerUI {
   constructor(private readonly applicationUrl: string) {}
 
-  private customSiteTitle = 'Ghatak-Nest Swagger UI';
+  private customSiteTitle = 'C17-nest Swagger UI';
   private faviconFilename = 'nestjs-logo.png';
   private topbarIconFilename = 'app-logo.png';
 
@@ -23,7 +23,7 @@ export class SwaggerUI {
   .swagger-ui .opblock.opblock-put .opblock-summary-method { background: ${SWAGGER_UI_CONSTANTS.HTTP_METHODS.PUT.SUMMARY_COLOR}; }
   .swagger-ui .btn.authorize svg { fill: ${SWAGGER_UI_CONSTANTS.AUTHORIZE.BACKGROUND_COLOR}; }
   .swagger-ui .topbar:before {
-    content: '${'Ghatak-Nest: Boiler plate for NestJs'}'; /* Add your custom text here */
+    content: '${'C17-nest: Boiler plate for NestJs'}'; /* Add your custom text here */
     color: white; /* Set text color */
     font-size: 45px; /* Adjust font size */
     font-weight: bold; /* Adjust font weight */
@@ -98,7 +98,7 @@ border-color:white;
     height: 100vh;}
 
     .swagger-ui .info .title small.version-stamp {
-   
+
     display: none;
 }
      `;
