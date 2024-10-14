@@ -53,3 +53,8 @@ npm install
 npm run start:dev
 ```
 See the terminal to get the swagger ui link post successful launch
+
+## Improvements
+
+The scope of this boilerplate can be expanded by integrating **Apache Kafka**, **Redis Streams**, **WebSockets**, and **TCP connection**-based use cases. For more details, please refer to this project of mine: 
+<a href="https://github.com/para-commando/Fault-Tolerant-Decoupled-Microservice-Arch">Fault-Tolerant Decoupled Microservice Architecture</a>.
